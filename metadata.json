@@ -1,0 +1,6 @@
+{
+  "name": "레플릿 제로",
+  "description": "1초 만에 오류 없이 소프트웨어를 빌드하고 스토어 무료 배포 및 APK 다운로드를 지원하는 레플릿 제로",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
