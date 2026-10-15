@@ -20,17 +20,23 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./app/gradlew || chmod +x ./gradlew
-      continue-on-error: true
-
-    - name: Build with Gradle
+    - name: Find Project and Build APK
       run: |
-        if [ -f "./app/gradlew" ]; then
-          cd app && ./gradlew assembleDebug
-        else
-          ./gradlew assembleDebug
+        # gradlew 파일이 있는 실제 안드로이드 프로젝트 폴더 자동 검색
+        GRADLEW_PATH=$(find . -name "gradlew" -not -path "*/.*/*" | head -n 1)
+        
+        if [ -z "$GRADLEW_PATH" ]; then
+          echo "Error: gradlew file not found anywhere in the repository!"
+          exit 1
         fi
+        
+        PROJECT_DIR=$(dirname "$GRADLEW_PATH")
+        echo "Found android project in: $PROJECT_DIR"
+        
+        # 권한 부여 및 빌드 시작
+        chmod +x "$GRADLEW_PATH"
+        cd "$PROJECT_DIR"
+        ./gradlew assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
